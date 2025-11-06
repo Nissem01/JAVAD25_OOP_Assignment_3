@@ -7,7 +7,6 @@ public class FifteenGame extends JPanel {
 
     private int size;
     private int dimension;
-    private int numberOfTiles;
     private int blankTilePosition;
     //lista för tile numrena
     private int[] tiles;
@@ -21,7 +20,7 @@ public class FifteenGame extends JPanel {
     public FifteenGame(int size, int dimension) {
         this.size = size;
         this.dimension = dimension;
-        this.numberOfTiles = size * size - 1;
+
 
         //panelens utseende
         setPreferredSize(new Dimension(dimension, dimension));
@@ -110,7 +109,7 @@ public class FifteenGame extends JPanel {
             //om isSolved = true så slutar spelet och visar ett popup att du vann!
             if (isSolved()) {
                 gameOver = true;
-                JOptionPane.showMessageDialog(this, "Grattis, du vann!");
+                JOptionPane.showMessageDialog(this, "Congratulations, you won!");
             }
         }
     }
@@ -191,7 +190,7 @@ public class FifteenGame extends JPanel {
             return false;
         }
         //loopar igenom och kollar så att ordningen är 1,2,3,4... osv. Om någon ruta har fel värde så är spelet inte löst
-        for (int i = 0; i < numberOfTiles; i++) {
+        for (int i = 0; i < (tiles.length-1); i++) {
             if (tiles[i] != i + 1){
                 return false;
             }
