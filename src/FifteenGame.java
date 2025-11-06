@@ -4,11 +4,11 @@ import java.awt.event.*;
 import java.util.*;
 
 public class FifteenGame extends JPanel {
+
     private int size;
     private int dimension;
     private int numberOfTiles;
     private int blankTilePosition;
-
     private int[] tiles;
     private final Random rand = new Random();
 
@@ -16,12 +16,12 @@ public class FifteenGame extends JPanel {
     private java.util.List<JButton> buttons = new ArrayList<>();
     private boolean gameOver;
 
-    public FifteenGame(int size, int dimension, int margin) {
+    public FifteenGame(int size, int dimension) {
         this.size = size;
         this.dimension = dimension;
         this.numberOfTiles = size * size - 1;
 
-        setPreferredSize(new Dimension(dimension, dimension + margin));
+        setPreferredSize(new Dimension(dimension, dimension));
         setLayout(new BorderLayout());
 
         JPanel puzzleBoard = new JPanel(new GridLayout(size, size, 2, 2));
@@ -47,12 +47,10 @@ public class FifteenGame extends JPanel {
         add(puzzleBoard, BorderLayout.CENTER);
         add(shuffleButton, BorderLayout.SOUTH);
 
-        // Klick på knappar
         for (int i = 0; i < buttons.size(); i++) {
             final int index = i;
             buttons.get(i).addActionListener(e -> tileClicked(index));
         }
-
         newGame();
     }
 
@@ -79,11 +77,8 @@ public class FifteenGame extends JPanel {
     }
 
     private void newGame() {
-        do {
             reset();
             shuffle();
-        } while (!isSolvable());
-        gameOver = false;
         updateBoard();
     }
 
@@ -102,7 +97,20 @@ public class FifteenGame extends JPanel {
             tiles[random] = tiles[n];
             tiles[n] = tmp;
         }
-        blankTilePosition = findBlank();
+        if (tiles[tiles.length - 1] != 0) {
+            int indexOfZero = -1;
+            for (int i = 0; i < tiles.length; i++) {
+                if (tiles[i] == 0) {
+                    indexOfZero = i;
+                    break;
+                }
+            }
+            int tmp = tiles[tiles.length - 1];
+            tiles[tiles.length - 1] = 0;
+            tiles[indexOfZero] = tmp;
+        }
+
+        blankTilePosition = tiles.length - 1;
     }
 
     private int findBlank() {
@@ -125,17 +133,6 @@ public class FifteenGame extends JPanel {
                 b.setEnabled(true);
             }
         }
-    }
-
-    private boolean isSolvable() {
-        int countInversions = 0;
-        for (int i = 0; i < numberOfTiles; i++) {
-            for (int j = 0; j < i; j++) {
-                if (tiles[j] > tiles[i])
-                    countInversions++;
-            }
-        }
-        return countInversions % 2 == 0;
     }
 
     private boolean isSolved() {
