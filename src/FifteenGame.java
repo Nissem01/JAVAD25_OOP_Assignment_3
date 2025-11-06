@@ -141,10 +141,10 @@ public class FifteenGame extends JPanel {
 
         //om den tomma rutan inte är på den sista positionen så flyttar vi den dit
         if (zeroIndex != tiles.length - 1) {
+            int temp = tiles[tiles.length - 1];
             tiles[tiles.length - 1] = 0;
-            tiles[zeroIndex] = tiles[tiles.length - 1];
+            tiles[zeroIndex] = temp;
         }
-
         blankTilePosition = tiles.length - 1;
     }
 
