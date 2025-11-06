@@ -13,6 +13,7 @@ public class FifteenGame extends JPanel {
     private int[] tiles;
     private final Random rand = new Random();
     private JButton shuffleButton;
+    private JButton cheatButton;
     //lista med sjävlaste tile knapparna
     private java.util.List<JButton> tileButtons = new ArrayList<>();
     private boolean gameOver;
@@ -26,11 +27,11 @@ public class FifteenGame extends JPanel {
         setPreferredSize(new Dimension(dimension, dimension));
         setLayout(new BorderLayout());
 
-        //skapandet av självaste pusselbrädan
+        //skapar Två Jpanels, en för sjävlaste pusselbrädan och en för knapparna
         JPanel puzzleBoard = new JPanel(new GridLayout(size, size, 2, 2));
-        puzzleBoard.setBackground(Color.WHITE);
+        JPanel buttonPanel = new JPanel();
 
-        //för varje siffra i tiles så skapas en button och läggs till i pusslet.
+        //för varje siffra i tiles så skapas en button som läggs till i puzzleBoard panelen
         tiles = new int[size * size];
         for (int i = 0; i < tiles.length; i++) {
             tiles[i] = (i + 1) % tiles.length;
@@ -41,10 +42,10 @@ public class FifteenGame extends JPanel {
             puzzleBoard.add(b);
         }
 
-        //lägger till självaste brädan PÅ panelen
+        //lägger till självaste puzzleBoard panelen
         add(puzzleBoard, BorderLayout.CENTER);
 
-        //lägger till en shuffle button längst ner
+        //Skapar en shuffle knapp
         shuffleButton = new JButton("Shuffle");
         shuffleButton.setFocusPainted(false);
         shuffleButton.addActionListener(e -> {
@@ -52,7 +53,23 @@ public class FifteenGame extends JPanel {
             updateBoard();
         });
 
-        add(shuffleButton, BorderLayout.SOUTH);
+        //skapar en cheat knapp
+        cheatButton = new JButton("Cheat");
+        cheatButton.setFocusPainted(false);
+        cheatButton.addActionListener(e -> {
+            // Sätter alla tiles till den lösta ordningen
+            for (int i = 0; i < tiles.length; i++) {
+                tiles[i] = (i + 1) % tiles.length;
+            }
+            blankTilePosition = tiles.length - 1;
+
+            updateBoard();
+        });
+
+        //lägger till en panel för cheat och shuffle knapparna
+        buttonPanel.add(shuffleButton);
+        buttonPanel.add(cheatButton);
+        add(buttonPanel, BorderLayout.SOUTH);
 
         //kopplar en listener till varje ruta
         for (int i = 0; i < tileButtons.size(); i++) {
@@ -65,8 +82,9 @@ public class FifteenGame extends JPanel {
     private void tileClicked(int pos) {
         //metoden körs varenda gång en tile är klickad
         //gör inget om spelet är över
-        if (gameOver) return;
-
+        if (gameOver){
+            return;
+        }
 
         // ger kolumnen av tilen som klickas
         int col = pos % size;
@@ -83,7 +101,7 @@ public class FifteenGame extends JPanel {
             tiles[blankTilePosition] = tiles[pos];
             //gör tilen som du klickade på tom
             tiles[pos] = 0;
-            //updaterar den tomma rutans position
+            //updaterar den tomma rutans position i indexet
             blankTilePosition = pos;
 
             //går igenom alla knappar i buttons arrayen och sätter tilen som är 0 till den tomma
@@ -116,6 +134,7 @@ public class FifteenGame extends JPanel {
     }
 
     private void shuffle() {
+        gameOver = false;
         //skapar en ny temporär lista och addar alla element från den nuvarande tiles listan
         java.util.List<Integer> list = new ArrayList<>();
         for (int tile : tiles) {
@@ -141,6 +160,7 @@ public class FifteenGame extends JPanel {
 
         //om den tomma rutan inte är på den sista positionen så flyttar vi den dit
         if (zeroIndex != tiles.length - 1) {
+            //tar värdet på den tilen som är på den sista platsen så vi kan flytta det
             int temp = tiles[tiles.length - 1];
             tiles[tiles.length - 1] = 0;
             tiles[zeroIndex] = temp;
