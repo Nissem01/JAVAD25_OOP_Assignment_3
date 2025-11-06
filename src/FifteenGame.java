@@ -35,7 +35,7 @@ public class FifteenGame extends JPanel {
         for (int i = 0; i < tiles.length; i++) {
             tiles[i] = (i + 1) % tiles.length;
             JButton b = new JButton();
-            b.setFont(new Font("Arial", Font.BOLD, 60));
+            b.setFont(new Font("Arial", Font.BOLD, 40));
             b.setFocusPainted(false);
             tileButtons.add(b);
             puzzleBoard.add(b);
