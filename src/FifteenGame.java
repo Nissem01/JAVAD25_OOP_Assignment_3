@@ -11,16 +11,16 @@ public class FifteenGame extends JPanel {
     //lista för tile numrena
     private int[] tiles;
     private final Random rand = new Random();
-    private JButton shuffleButton;
-    private JButton cheatButton;
+    private boolean gameOver;
+
     //lista med sjävlaste tile knapparna
     private java.util.List<JButton> tileButtons = new ArrayList<>();
-    private boolean gameOver;
+    private JButton shuffleButton;
+    private JButton cheatButton;
 
     public FifteenGame(int size, int dimension) {
         this.size = size;
         this.dimension = dimension;
-
 
         //panelens utseende
         setPreferredSize(new Dimension(dimension, dimension));
