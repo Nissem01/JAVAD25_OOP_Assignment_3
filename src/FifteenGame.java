@@ -15,6 +15,7 @@ public class FifteenGame extends JPanel {
 
     //lista med sjävlaste tile knapparna
     private java.util.List<JButton> tileButtons = new ArrayList<>();
+
     private JButton shuffleButton;
     private JButton cheatButton;
 
@@ -72,10 +73,10 @@ public class FifteenGame extends JPanel {
 
         //kopplar en listener till varje ruta
         for (int i = 0; i < tileButtons.size(); i++) {
-            final int index = i;
+            int index = i;
             tileButtons.get(i).addActionListener(e -> tileClicked(index));
         }
-        newGame();
+        shuffle();
     }
 
     private void tileClicked(int pos) {
@@ -114,38 +115,20 @@ public class FifteenGame extends JPanel {
         }
     }
 
-    private void newGame() {
-            // Återställer tilesen så att dom hamnar i normal ordning
-            reset();
-            // Blandar tilesen
-            shuffle();
-            //updaterar så att användaren ser dom nya tilesen
-            updateBoard();
-    }
-
-    private void reset() {
-        //loopar igenom all tilesen och lägger dom i normal ordning
-        for (int i = 0; i < tiles.length; i++) {
-            tiles[i] = (i + 1) % tiles.length;
-        }
-        //sätter den tommas position till den sista
-        blankTilePosition = tiles.length - 1;
-    }
-
     private void shuffle() {
         gameOver = false;
         //skapar en ny temporär lista och addar alla element från den nuvarande tiles listan
-        java.util.List<Integer> list = new ArrayList<>();
+        java.util.List<Integer> tempList = new ArrayList<>();
         for (int tile : tiles) {
-            list.add(tile);
+            tempList.add(tile);
         }
 
         //använder collections för att shuffla elementen i den nya listan
-        Collections.shuffle(list, rand);
+        Collections.shuffle(tempList, rand);
 
         //kopierar tillbaks dom shufflade tilesen till den riktiga listan
         for (int i = 0; i < tiles.length; i++) {
-            tiles[i] = list.get(i);
+            tiles[i] = tempList.get(i);
         }
 
         //går igenom tiles listan och hittar var den tomma rutans position är
@@ -165,6 +148,7 @@ public class FifteenGame extends JPanel {
             tiles[zeroIndex] = temp;
         }
         blankTilePosition = tiles.length - 1;
+        updateBoard();
     }
 
     private void updateBoard() {
