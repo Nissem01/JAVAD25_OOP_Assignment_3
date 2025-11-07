@@ -50,7 +50,6 @@ public class FifteenGame extends JPanel {
         shuffleButton.setFocusPainted(false);
         shuffleButton.addActionListener(e -> {
             shuffle();
-            updateBoard();
         });
 
         //skapar en cheat knapp
@@ -62,7 +61,6 @@ public class FifteenGame extends JPanel {
                 tiles[i] = (i + 1) % tiles.length;
             }
             blankTilePosition = tiles.length - 1;
-
             updateBoard();
         });
 
